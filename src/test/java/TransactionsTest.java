@@ -37,7 +37,7 @@ public class TransactionsTest {
     }
 
     @Test
-    public void getNote()
+    public void getNote() throws SQLException
     {
         String functionAnswer = Transactions.getNote(connectionMock, 0);
         assertThat(functionAnswer, equalTo("NoteMock"));
