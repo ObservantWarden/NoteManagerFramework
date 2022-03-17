@@ -6,6 +6,8 @@ import java.sql.Connection;
  */
 public class Transactions {
     public static void sendNote(Connection con, String text) {
+        text = "121";
+        return;
         // TODO:
         // сохранить запись в таблице
     }
