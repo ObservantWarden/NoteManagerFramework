@@ -124,7 +124,6 @@ class PictureNote implements INote{
     public void fetch(Connection sqlConnection, int id) {
         try{
             String command = "UPDATE ImageHolder SET image =" + Arrays.toString(image) + " WHERE id_image=" + id;
-            System.out.println(command);
             sqlConnection.createStatement().execute(command);
             sqlConnection.close();
         }catch (SQLException e){e.printStackTrace();}
