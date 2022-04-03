@@ -1,53 +1,49 @@
-import org.postgresql.util.PSQLException;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 
-public class TextNote implements INote{
+public class TextNote implements INote
+{
     private String text;
-    private final int id;
+    private final UUID id;
 
-    public TextNote(String text, int id){
+    public TextNote (String text)
+    {
         this.text = text;
-        this.id = id;
-    }
-
-    public TextNote(String text){
-        this.text = text;
-        this.id = 1;
+        this.id = UUID.randomUUID();
     }
 
     @Override
-    public void commit(Connection sqlConnection) {
+    public void commit (Connection sqlConnection, UUID id_user)
+    {
         try {
-            String command = "INSERT INTO TextHolder (id_text, text) values (" + id + ", '" + text + "');";
+            UUID otherId = UUID.randomUUID();
+            String command = "INSERT INTO TextHolder (id_text, text) values ('" + id + "', '" + text + "');";
             sqlConnection.createStatement().execute(command);
 
-
-            command = "INSERT INTO IdHolder (id, id_text) values (" + id + ", '" + id + "');";
-            try {
-                sqlConnection.createStatement().execute(command);
-            }catch (PSQLException e){
-                command = "UPDATE IdHolder SET id_text =" + id + " WHERE id=" + id;
-                sqlConnection.createStatement().execute(command);
-                sqlConnection.close();
-            }
-            sqlConnection.close();
-        } catch (SQLException e) {
+            command = "INSERT INTO IdHolder (id, id_text, id_user) values ('" + otherId + "', '" + id + "' , '" + id_user + "');";
+            sqlConnection.createStatement().execute(command);
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void fetch(Connection sqlConnection, int id) {
-        try{
+    public void fetch(Connection sqlConnection, UUID id)
+    {
+        try
+        {
             ResultSet rs = sqlConnection.createStatement().executeQuery("SELECT text FROM TextHolder WHERE id_text = " + id);
             rs.next();
             text = rs.getString(1);
             sqlConnection.close();
-        }catch (SQLException e){e.printStackTrace();}
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
