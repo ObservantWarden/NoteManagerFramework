@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,13 +34,14 @@ public class TransactionsTest {
     @Test
     public void sendNote() throws SQLException {
         Transactions.sendNote(connectionMock, "Text");
-        verify(statementMock, times(1)).execute(any());
+        verify(statementMock, times(2)).execute(any());
     }
 
     @Test
     public void getNote()
     {
-        String functionAnswer = Transactions.getNote(connectionMock, 0);
+        UUID id = UUID.randomUUID();
+        String functionAnswer = Transactions.getNote(connectionMock, id);
         assertThat(functionAnswer, equalTo("NoteMock"));
     }
 }

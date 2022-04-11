@@ -11,10 +11,14 @@ class PictureNote implements INote{
     private byte[] image;
     private final UUID id;
 
-    public PictureNote (BufferedImage  image) throws IOException {
+    public PictureNote (BufferedImage  image)  {
         this.id = UUID.randomUUID();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
+        try {
+            ImageIO.write(image, "jpg", baos);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         this.image = baos.toByteArray();
     }
 
@@ -47,7 +51,7 @@ class PictureNote implements INote{
         {
             ResultSet rs = sqlConnection.createStatement().executeQuery("SELECT image FROM ImageHolder WHERE id_image = " + id);
             rs.next();
-            image = rs.getBytes(1);
+            image = rs.getBytes("image");
         }catch (SQLException e)
         {
             e.printStackTrace();

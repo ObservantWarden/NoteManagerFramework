@@ -24,15 +24,8 @@ public class Authorization
         serverValidation();
     }
 
-    public User authorize ()
-    {
-        try
-        {
-            validation();
-        } catch (ValidationExceptionModel e)
-        {
-            e.printStackTrace();
-        }
+    public User authorize () throws ValidationExceptionModel {
+        validation();
         return new User(login, password, userId, sqlCon);
     }
 
@@ -45,14 +38,16 @@ public class Authorization
     private void serverValidation () throws ValidationExceptionModel
     {
         String command = "SELECT id_user FROM UserHolder WHERE login = ? and password = ?";
+//        String command = "SELECT id_user FROM UserHolder WHERE login = '" + login + "'  and password = '" + password + "';";
         try
         {
             PreparedStatement ps = sqlCon.prepareStatement(command);
             ps.setString(1, login);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
+//            ResultSet rs = sqlCon.createStatement().executeQuery(command);
             rs.next();
-            String uuid = rs.getString(1);
+            String uuid = rs.getString("id_user");
             userId = UUID.fromString(uuid);
         } catch (SQLException e)
         {

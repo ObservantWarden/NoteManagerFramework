@@ -38,7 +38,7 @@ public class TextNote implements INote
         {
             ResultSet rs = sqlConnection.createStatement().executeQuery("SELECT text FROM TextHolder WHERE id_text = " + id);
             rs.next();
-            text = rs.getString(1);
+            text = rs.getString("text");
             sqlConnection.close();
         }catch (SQLException e)
         {
