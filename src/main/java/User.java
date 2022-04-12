@@ -1,10 +1,6 @@
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -86,5 +82,25 @@ public class User
         for(UUID uuid: uuidsImages)
             data.add(getPicture(uuid));
         return data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!getUserId().equals(user.getUserId())) return false;
+        if (!userName.equals(user.userName)) return false;
+        return userPassword.equals(user.userPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUserId().hashCode();
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + userPassword.hashCode();
+        return result;
     }
 }

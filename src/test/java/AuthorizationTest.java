@@ -1,6 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import java.sql.*;
 import java.util.UUID;
@@ -22,11 +23,9 @@ public class AuthorizationTest {
     @Mock
     ResultSet resultSetMock = mock(ResultSet.class);
 
-    @Mock
+    @Spy
     PreparedStatement preparedStatementMock = mock(PreparedStatement.class);
 
-//    @Mock
-//            UUID uuidmock = mock(UUID.class);
 
     UUID userID = UUID.randomUUID();
     User testUser = new User("login@login.login", "Password12", userID, connectionMock);
@@ -35,10 +34,9 @@ public class AuthorizationTest {
     public void setup() throws SQLException {
         when(connectionMock.createStatement()).thenReturn(statementMock);
         when(statementMock.executeQuery(any())).thenReturn(resultSetMock);
-//        when(preparedStatementMock.executeQuery(any())).thenReturn(resultSetMock); //не работает. Также ничего не могу сдеалать с preparedstatement, потому что там setString
-//        when(UUID.randomUUID()).thenReturn(userID);
-//        when(UUID.fromString(anyString())).thenReturn(userID); //не могу провести никакие действия с fromstring и uuid, потому что uuid не может быть mock
-
+        when(connectionMock.prepareStatement(any())).thenReturn(preparedStatementMock);
+        when(preparedStatementMock.executeQuery()).thenReturn(resultSetMock);
+        when(resultSetMock.getString("id_user")).thenReturn(userID.toString());
     }
 
     @Test

@@ -1,3 +1,5 @@
+import org.apache.commons.io.FileUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -11,7 +13,8 @@ class PictureNote implements INote{
     private byte[] image;
     private final UUID id;
 
-    public PictureNote (BufferedImage  image)  {
+    public PictureNote (BufferedImage  image)
+    {
         this.id = UUID.randomUUID();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -22,9 +25,23 @@ class PictureNote implements INote{
         this.image = baos.toByteArray();
     }
 
-    public PictureNote (byte[] image){
+    public PictureNote (byte[] image)
+    {
         this.id = UUID.randomUUID();
         this.image = image;
+    }
+
+    public PictureNote (File file)
+    {
+        this.id = UUID.randomUUID();
+        try
+        {
+            this.image = FileUtils.readFileToByteArray(file);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
